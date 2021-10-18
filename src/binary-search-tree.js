@@ -9,13 +9,13 @@ const { Node } = require('../extensions/list-tree.js');
 
 module.exports = class BinarySearchTree {
 constructor() {
-  this.root = null
+  this._root = null
 }
 root(){
-  return this.root;
+  return this._root;
 }
   add(data) {
-    this.root = addWithin(this.root, data);
+    this._root = addWithin(this._root, data);
     function addWithin(node, data){
       if (!node) {
         return new Node(data);
@@ -32,22 +32,8 @@ root(){
       return node;
     }
     }
-  /*has(data) {
-    return searchWithin(this.root, data)
-    function searchWithin(node, data) {
-      if(!node) {
-        return false;
-      }
-      if (node.data === data) {
-        return true;
-      }
-      return data < node.data ? 
-      searchWithin(node.left, data) :
-      searchWithin(node.left, data);
-    }}
-  */
  has(data) {
-   let current = this.root;
+   let current = this._root;
    while(current) {
      if(data === current.data) {
        return true;
@@ -62,7 +48,7 @@ root(){
  }
  
   find(data) {
-    let current = this.root;
+    let current = this._root;
     while (current.data !== data) {
       if (data < current.data) {
         current = current.left;
@@ -73,9 +59,10 @@ root(){
         return null;
       }
   }
+  return current
 }
   remove(data) {
-    this.root = removeNode(this.root, data)
+    this._root = removeNode(this._root, data)
     function removeNode(node, data){
       if(!node) {
         return null;
@@ -102,7 +89,7 @@ root(){
         while (minFromRight.left) {
           minFromRight = minFromRight.left
         }
-        node.value = minFromRight.value
+        node.data = minFromRight.data
         node.right = removeNode(node.right, minFromRight.data)
         return node
       }
@@ -110,16 +97,23 @@ root(){
   };
   
   min() {
-    let current = this.root;
-    while(current.left !== null) {
-      current = current.left;
+    if(!this._root){
+      return;
     }
+    let node = this._root;
+    while(node.left) {
+      node = node.left;
+    }
+    return node.data;
   }
   max() {
-    let current = this.root
-    while(current.left !== null){
-      current = current.left
+    if(!this.root){
+      return;
     }
-    return current.data
+    let node = this._root
+    while(node.right){
+      node = node.right
+    }
+    return node.data
   }
 }
